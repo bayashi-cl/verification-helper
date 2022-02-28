@@ -42,8 +42,7 @@ class TestPythonListDependencies(unittest.TestCase):
 
         with tests.utils.load_files_pathlib(files) as tempdir:
             with tests.utils.chdir(tempdir):
-                # TODO: Check why this doesn't include `library/__init__.py`. The lack of `library/__init__.py` is acceptable but not so good.
-                expected = sorted([tempdir / 'tests' / 'main.py', tempdir / 'library' / 'imported.py'])
+                expected = sorted([tempdir / 'tests' / 'main.py', tempdir / 'library' / 'imported.py', tempdir / "library" / "__init__.py"])
                 actual = sorted(python.PythonLanguage().list_dependencies(tempdir / 'tests' / 'main.py', basedir=tempdir))
                 self.assertEqual(actual, expected)
 
