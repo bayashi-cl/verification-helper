@@ -51,9 +51,10 @@ def _python_list_depending_files(path: pathlib.Path, basedir: pathlib.Path) -> L
     # find files imported by `path`
     finder.run_script(str(path))
     for module in finder.modules.values():
-        if module.__file__ is None:  #exclude modules that don't have source file (like sys).
+        #exclude modules that don't have source file (like sys).
+        if module.__file__ is None:  #type: ignore
             continue
-        file = pathlib.Path(module.__file__)
+        file = pathlib.Path(module.__file__)  # type: ignore
         try:  # check under `basedir`
             file.relative_to(basedir)
             res_deps.append(file)
