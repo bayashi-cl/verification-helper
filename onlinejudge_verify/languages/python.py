@@ -1,7 +1,7 @@
 # Python Version: 3.x
 import functools
-import pathlib
 import modulefinder
+import pathlib
 import sys
 import textwrap
 from logging import getLogger
