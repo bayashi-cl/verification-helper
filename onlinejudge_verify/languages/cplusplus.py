@@ -182,8 +182,9 @@ class CPlusPlusLanguage(Language):
 
     def bundle(self, path: pathlib.Path, *, basedir: pathlib.Path = pathlib.Path.cwd(), options: Dict[str, Any]) -> bytes:
         include_paths: List[pathlib.Path] = options['include_paths']
+        release: bool = options['release']
         assert isinstance(include_paths, list)
-        bundler = Bundler(iquotes=include_paths)
+        bundler = Bundler(iquotes=include_paths, release=release)
         bundler.update(path)
         return bundler.get()
 

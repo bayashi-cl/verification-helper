@@ -226,8 +226,9 @@ class Bundler:
     result_lines: List[bytes]
     path_stack: Set[pathlib.Path]
     compiler: str
+    release: bool
 
-    def __init__(self, *, iquotes: Optional[List[pathlib.Path]] = None, compiler: str = os.environ.get('CXX', 'g++')) -> None:
+    def __init__(self, *, iquotes: Optional[List[pathlib.Path]] = None, compiler: str = os.environ.get('CXX', 'g++'), release: bool = False) -> None:
         if iquotes is None:
             iquotes = []
         self.iquotes = iquotes
@@ -236,6 +237,7 @@ class Bundler:
         self.result_lines = []
         self.path_stack = set()
         self.compiler = compiler
+        self.release = release
 
     # これをしないと __FILE__ や __LINE__ が壊れる
     def _line(self, line: int, path: pathlib.Path) -> None:
@@ -247,7 +249,8 @@ class Bundler:
             pass
         # パス中の特殊文字を JSON style にエスケープしてから生成コードに記述
         # quick solution to this: https://github.com/online-judge-tools/verification-helper/issues/280
-        self.result_lines.append('#line {} {}\n'.format(line, json.dumps(str(path))).encode())
+        if not self.release:
+            self.result_lines.append('#line {} {}\n'.format(line, json.dumps(str(path))).encode())
 
     # path を解決する
     # see: https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html#Directory-Options
