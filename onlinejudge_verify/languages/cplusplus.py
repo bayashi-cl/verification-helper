@@ -94,7 +94,8 @@ class CPlusPlusLanguage(Language):
     def _list_environments(self) -> List[CPlusPlusLanguageEnvironment]:
         default_CXXFLAGS = ['--std=c++17', '-O2', '-Wall', '-g']
         if platform.system() == 'Windows' or 'CYGWIN' in platform.system():
-            default_CXXFLAGS.append('-Wl,stack-size=0x10000000')
+            # TODO: Append stack size options valid for both g++ and clang++ (or give up).
+            pass
         if platform.system() == 'Darwin':
             default_CXXFLAGS.append('-Wl,-stack_size,0x10000000')
         if platform.uname().system == 'Linux' and 'Microsoft' in platform.uname().release:
