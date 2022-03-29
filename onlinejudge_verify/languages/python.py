@@ -8,6 +8,7 @@ from logging import getLogger
 from typing import Any, Dict, List, Sequence
 
 from onlinejudge_verify.languages.models import Language, LanguageEnvironment
+from onlinejudge_verify.languages.special_comments import list_doxygen_annotations
 
 logger = getLogger(__name__)
 
@@ -64,6 +65,11 @@ def _python_list_depending_files(path: pathlib.Path, basedir: pathlib.Path) -> L
 
 
 class PythonLanguage(Language):
+    def list_attributes(self, path: pathlib.Path, *, basedir: pathlib.Path) -> Dict[str, Any]:
+        attributes = super().list_attributes(path=path, basedir=basedir)
+        attributes.update(list_doxygen_annotations(path.resolve()))
+        return attributes
+
     def list_dependencies(self, path: pathlib.Path, *, basedir: pathlib.Path) -> List[pathlib.Path]:
         return _python_list_depending_files(path.resolve(), basedir)
 
